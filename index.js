@@ -9,12 +9,7 @@ const server = http.createServer(app);
 
 const PORT = 5000;
 
-const io = new Server(server, {
-  cors: {
-    origin: "https://jocular-boba-d481bb.netlify.app/",
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(server);
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);

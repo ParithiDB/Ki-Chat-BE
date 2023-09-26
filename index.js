@@ -4,8 +4,8 @@ const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const corsOptions = {
-  origin: "https://jocular-boba-d481bb.netlify.app", // Adjust this to your Netlify app's domain
-  credentials: true, // Allow cookies and credentials
+  origin: "https://jocular-boba-d481bb.netlify.app",
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -16,8 +16,8 @@ const PORT = 5000;
 
 const io = new Server(server, {
   cors: {
-    origin: "https://jocular-boba-d481bb.netlify.app", // Adjust this to your Netlify app's domain
-    methods: ["GET", "POST"], // Add any HTTP methods you need
+    origin: "https://jocular-boba-d481bb.netlify.app",
+    methods: ["GET", "POST"],
   },
 });
 

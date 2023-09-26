@@ -3,14 +3,23 @@ const app = express();
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
-app.use(cors({ origin: 'https://jocular-boba-d481bb.netlify.app' }));
+const corsOptions = {
+  origin: "https://jocular-boba-d481bb.netlify.app", // Adjust this to your Netlify app's domain
+  credentials: true, // Allow cookies and credentials
+};
 
+app.use(cors(corsOptions));
 
 const server = http.createServer(app);
 
 const PORT = 5000;
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "https://jocular-boba-d481bb.netlify.app", // Adjust this to your Netlify app's domain
+    methods: ["GET", "POST"], // Add any HTTP methods you need
+  },
+});
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
@@ -18,12 +27,14 @@ io.on("connection", (socket) => {
   socket.on("join_room", (data) => {
     socket.join(data.room);
     console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
-  
+
     // Broadcast the join message to all clients in the room
     const joinMessage = `${data.username} joined the chat`;
-    io.to(data.room).emit("receive_message", { message: joinMessage, author: "System" });
+    io.to(data.room).emit("receive_message", {
+      message: joinMessage,
+      author: "System",
+    });
   });
-  
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
